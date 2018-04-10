@@ -26,8 +26,18 @@ public class Shape {
 
     public Shape(Tetrominoes pieceShape) {
         this.pieceShape = pieceShape;
-        coordinates = coordsTable[pieceShape.ordinal()];
+        coordinates = coordsTable[pieceShape.ordinal()]; //saca el ordinal a partir del enum
 
+    }
+
+    public Shape() {
+        int randomNumber = (int) (Math.random() * 7 + 1); //del 0-6 +1
+        pieceShape = Tetrominoes.values()[randomNumber]; //teniendo el ordinal, saca el enum
+        coordinates = coordsTable[randomNumber];
+    }
+
+    public static Shape getRandomShape() {
+        return new Shape();
     }
 
     public int[][] getCoordinates() {
