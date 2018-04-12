@@ -18,17 +18,20 @@ import javax.swing.*;
  */
 public class Board extends JPanel implements ActionListener {
 
-    
     class MyKeyAdapter extends KeyAdapter {
 
         @Override
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_LEFT:
-                    currentCol--;
+                    if (currentCol + currentShape.getXmin() > 0) {
+                        currentCol--;
+                    }
                     break;
                 case KeyEvent.VK_RIGHT:
-                    currentCol++;
+                    if (currentCol + currentShape.getXmax() < NUM_COLS - 1) {
+                        currentCol++;
+                    }
                     break;
                 case KeyEvent.VK_UP:
                     currentRow--;
@@ -56,11 +59,7 @@ public class Board extends JPanel implements ActionListener {
 
     private Timer timer;
 
-    //MyKeyAdapter keyAdepter = new MyKeyAdapter();
-
-    private MyKeyAdapter keyAdepter;
-
-    
+    private MyKeyAdapter myKeyAdepter;
 
     public Board() {
         super();
@@ -77,18 +76,22 @@ public class Board extends JPanel implements ActionListener {
         cleanBoard();
 
         deltaTime = 500;
-        currentShape = new Shape(); // = Shape.getRandomShape()
+        currentShape = null;
 
         currentRow = 0;
         currentCol = NUM_COLS / 2;
-        
-        keyAdepter = new MyKeyAdapter();
-        addKeyListener(keyAdepter);
+
+        myKeyAdepter = new MyKeyAdapter();
+
     }
 
     public void initGame() {
         initValues();
         timer.start();
+
+        currentShape = new Shape(); // = Shape.getRandomShape()
+
+        addKeyListener(myKeyAdepter);
 
     }
 
@@ -112,7 +115,10 @@ public class Board extends JPanel implements ActionListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         //drawBoard(g);
-        drawCurrentShape(g);
+        if (currentShape != null) {
+            drawCurrentShape(g);
+        }
+
     }
 
     private void drawSquare(Graphics g, int row, int col, Tetrominoes shape) {

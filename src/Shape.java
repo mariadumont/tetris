@@ -24,6 +24,8 @@ public class Shape {
         {{1, -1}, {0, -1}, {0, 0}, {0, 1}}
     };
 
+    int candidate;
+
     public Shape(Tetrominoes pieceShape) {
         this.pieceShape = pieceShape;
         coordinates = coordsTable[pieceShape.ordinal()]; //saca el ordinal a partir del enum
@@ -46,5 +48,50 @@ public class Shape {
 
     public Tetrominoes getShape() {
         return pieceShape;
+    }
+
+    public int getXmin() {
+
+        candidate = coordinates[0][0];
+
+        for (int i = 1; i < coordinates.length; i++) {
+            if (coordinates[i][0] < candidate) {
+                candidate = coordinates[i][0];
+            }
+        }
+        return candidate;
+    }
+
+    public int getXmax() {
+        candidate = coordinates[0][0];
+
+        for (int i = 1; i < coordinates.length; i++) {
+            if (coordinates[i][0] > candidate) {
+                candidate = coordinates[i][0];
+            }
+        }
+        return candidate;
+    }
+
+    public int getYmin() {
+        candidate = coordinates[0][1];
+
+        for (int i = 1; i < coordinates.length; i++) {
+            if (coordinates[0][i] < candidate) {
+                candidate = coordinates[0][i];
+            }
+        }
+        return candidate;
+    }
+
+    public int getYmax() {
+        candidate = coordinates[0][1];
+
+        for (int i = 1; i > coordinates.length; i++) {
+            if (coordinates[0][i] < candidate) {
+                candidate = coordinates[0][i];
+            }
+        }
+        return candidate;
     }
 }
