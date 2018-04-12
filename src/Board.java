@@ -24,12 +24,12 @@ public class Board extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_LEFT:
-                    if (currentCol + currentShape.getXmin() > 0) {
+                    if (canMoveTo(currentRow, currentCol - 1)) {
                         currentCol--;
                     }
                     break;
                 case KeyEvent.VK_RIGHT:
-                    if (currentCol + currentShape.getXmax() < NUM_COLS - 1) {
+                    if (canMoveTo(currentRow, currentCol + 1)) {
                         currentCol++;
                     }
                     break;
@@ -44,6 +44,7 @@ public class Board extends JPanel implements ActionListener {
             }
             repaint();
         }
+
     }
 
     public static final int NUM_ROWS = 22;
@@ -70,7 +71,7 @@ public class Board extends JPanel implements ActionListener {
         timer = new Timer(deltaTime, this);
     }
 
-    public void initValues() {
+    private void initValues() {
         setFocusable(true);
 
         cleanBoard();
@@ -78,7 +79,7 @@ public class Board extends JPanel implements ActionListener {
         deltaTime = 500;
         currentShape = null;
 
-        currentRow = 0;
+        currentRow = -2;
         currentCol = NUM_COLS / 2;
 
         myKeyAdepter = new MyKeyAdapter();
@@ -95,13 +96,21 @@ public class Board extends JPanel implements ActionListener {
 
     }
 
-    public void cleanBoard() {
+    private void cleanBoard() {
         for (int row = 0; row < NUM_ROWS; row++) {
             for (int col = 0; col < NUM_COLS; col++) {
 
                 matrix[row][col] = Tetrominoes.NoShape;
             }
         }
+    }
+
+    private boolean canMoveTo(int newRow, int newCol) {
+        if ((newCol + currentShape.getXmin() < 0)
+                || (newCol + currentShape.getXmax() >= NUM_COLS)) {
+            return false;
+        }
+        return true;
     }
 
     //Main Game loop
@@ -122,8 +131,7 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void drawSquare(Graphics g, int row, int col, Tetrominoes shape) {
-        Color colors[] = {new Color(0, 0, 0),
-            new Color(204, 102, 102),
+        Color colors[] = {new Color(0, 0, 0), new Color(204, 102, 102),
             new Color(102, 204, 102), new Color(102, 102, 204),
             new Color(204, 204, 102), new Color(204, 102, 204),
             new Color(102, 204, 204), new Color(218, 170, 0)
@@ -154,7 +162,7 @@ public class Board extends JPanel implements ActionListener {
         int[][] squaresArray = currentShape.getCoordinates();
 
         for (int point = 0; point <= 3; point++) {
-            drawSquare(g, currentRow + squaresArray[point][1], currentCol + squaresArray[point][0], Tetrominoes.ZShape);
+            drawSquare(g, currentRow + squaresArray[point][1], currentCol + squaresArray[point][0], currentShape.getShape());
         }
     }
 
