@@ -33,8 +33,8 @@ public class Board extends JPanel implements ActionListener {
 
         matrix = new Tetrominoes[NUM_ROWS][NUM_COLS];
 
-        timer = new Timer(deltaTime, this);
         initValues();
+        timer = new Timer(deltaTime, this);
     }
 
     public void initValues() {
@@ -65,9 +65,10 @@ public class Board extends JPanel implements ActionListener {
     //Main Game loop
     @Override
     public void actionPerformed(ActionEvent ae) {
-
+        currentRow++;
+        repaint(); //no se puede lamar directamente a paintComponent
     }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -104,8 +105,12 @@ public class Board extends JPanel implements ActionListener {
         return getHeight() / NUM_ROWS;
     }
 
-    private void drawCurrentShape(){
-        
+    private void drawCurrentShape(Graphics g) {
+        int[][] squaresArray = currentShape.getCoordinates();
+
+        for (int point = 0; point <= 3; point++) {
+            drawSquare(g, currentRow + squaresArray[point][1], currentCol + squaresArray[point][0], Tetrominoes.ZShape);
+        }
     }
 
 }
