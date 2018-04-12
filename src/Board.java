@@ -2,6 +2,9 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.*;
 
 /*
@@ -14,6 +17,31 @@ import javax.swing.*;
  * @author alu20482156n
  */
 public class Board extends JPanel implements ActionListener {
+
+    
+    class MyKeyAdapter extends KeyAdapter {
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_LEFT:
+                    currentCol--;
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    currentCol++;
+                    break;
+                case KeyEvent.VK_UP:
+                    currentRow--;
+                    break;
+                case KeyEvent.VK_DOWN:
+                    currentRow++;
+                    break;
+                default:
+                    break;
+            }
+            repaint();
+        }
+    }
 
     public static final int NUM_ROWS = 22;
     public static final int NUM_COLS = 10;
@@ -28,6 +56,12 @@ public class Board extends JPanel implements ActionListener {
 
     private Timer timer;
 
+    //MyKeyAdapter keyAdepter = new MyKeyAdapter();
+
+    private MyKeyAdapter keyAdepter;
+
+    
+
     public Board() {
         super();
 
@@ -38,6 +72,8 @@ public class Board extends JPanel implements ActionListener {
     }
 
     public void initValues() {
+        setFocusable(true);
+
         cleanBoard();
 
         deltaTime = 500;
@@ -45,6 +81,9 @@ public class Board extends JPanel implements ActionListener {
 
         currentRow = 0;
         currentCol = NUM_COLS / 2;
+        
+        keyAdepter = new MyKeyAdapter();
+        addKeyListener(keyAdepter);
     }
 
     public void initGame() {
