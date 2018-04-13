@@ -150,6 +150,32 @@ public class Board extends JPanel implements ActionListener {
             currentShape = new Shape();
             currentRow = INIT_ROW;
             currentCol = NUM_COLS / 2;
+            checkRow();
+            repaint();
+        }
+    }
+
+    private void checkRow() {
+        boolean lineNoWhite = true;
+
+        for (int i = 0; i < NUM_ROWS; i++) {
+            lineNoWhite = true;
+            for (int j = 0; j < NUM_COLS; j++) {
+                if (matrix[i][j] == Tetrominoes.NoShape) {
+                    lineNoWhite = false;
+                }
+            }
+            if (lineNoWhite) {
+                cleanRow(i);
+            }
+        }
+    }
+
+    private void cleanRow(int numRow) {
+        for (int i = numRow; i > 0; i--) {
+            for (int j = 0; j < NUM_COLS; j++) {
+                matrix[i][j] = matrix[i - 1][j];
+            }
         }
     }
 
