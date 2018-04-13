@@ -6,6 +6,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.*;
+import sun.misc.LRUCache;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -34,10 +35,12 @@ public class Board extends JPanel implements ActionListener {
                     }
                     break;
                 case KeyEvent.VK_UP:
-                    currentRow--;
+
                     break;
                 case KeyEvent.VK_DOWN:
-                    currentRow++;
+                    if (canMoveTo(currentRow + 1, currentCol)) {
+                        currentRow++;
+                    }
                     break;
                 default:
                     break;
@@ -62,6 +65,8 @@ public class Board extends JPanel implements ActionListener {
 
     private MyKeyAdapter myKeyAdepter;
 
+    public final int INIT_ROW = -2;
+
     public Board() {
         super();
 
@@ -79,7 +84,7 @@ public class Board extends JPanel implements ActionListener {
         deltaTime = 500;
         currentShape = null;
 
-        currentRow = -2;
+        currentRow = INIT_ROW;
         currentCol = NUM_COLS / 2;
 
         myKeyAdepter = new MyKeyAdapter();
@@ -107,7 +112,8 @@ public class Board extends JPanel implements ActionListener {
 
     private boolean canMoveTo(int newRow, int newCol) {
         if ((newCol + currentShape.getXmin() < 0)
-                || (newCol + currentShape.getXmax() >= NUM_COLS)) {
+                || (newCol + currentShape.getXmax() >= NUM_COLS)
+                || (newRow + currentShape.getYmax() >= NUM_ROWS)) {
             return false;
         }
         return true;
@@ -116,18 +122,49 @@ public class Board extends JPanel implements ActionListener {
     //Main Game loop
     @Override
     public void actionPerformed(ActionEvent ae) {
-        currentRow++;
-        repaint(); //no se puede lamar directamente a paintComponent
+        if (canMoveTo(currentRow + 1, currentCol)) {
+            currentRow++;
+            repaint(); //no se puede lamar directamente a paintComponent
+        } else {
+            moveCurrentShapeToMatrix();
+            currentShape = new Shape();
+            currentRow = INIT_ROW;
+            currentCol = NUM_COLS / 2;
+        }
+    }
+
+    private void moveCurrentShapeToMatrix() {
+        int[][] squaresArray = currentShape.getCoordinates();
+        for (int point = 0; point <= 3; point++) {
+            int row = currentRow + squaresArray[point][1];
+            int col = currentCol + squaresArray[point][0];
+            matrix[row][col] = currentShape.getShape();
+        }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        //drawBoard(g);
+        drawBoard(g);
         if (currentShape != null) {
             drawCurrentShape(g);
         }
+        drawBorder(g);
 
+    }
+
+    public void drawBorder(Graphics g) {
+        g.setColor(Color.red);
+        g.drawRect(0, 0, NUM_COLS * squareWidth(), NUM_ROWS * squareHeight());
+    }
+
+    public void drawBoard(Graphics g) {
+        for (int row = 0; row < NUM_ROWS; row++) {
+            for (int col = 0; col < NUM_COLS; col++) {
+
+                drawSquare(g, row, col, matrix[row][col]);
+            }
+        }
     }
 
     private void drawSquare(Graphics g, int row, int col, Tetrominoes shape) {
