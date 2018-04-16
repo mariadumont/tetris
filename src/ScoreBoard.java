@@ -17,16 +17,25 @@ public class ScoreBoard extends JLabel {
     public ScoreBoard() {
         super(); //inicializamos la superclase
         score = 0;
+        
     }
 
     public void increment(int points) {
         score += points;
+        setText("Score: " + score);
     }
 
     public void reset() {
         score = 0;
+        setText("Score: " + 0);
     }
-    
-    
+
+   public void pause() {
+        setText("Paused");
+    }
+
+    public void resume() {
+        setText("Score: " + score);
+    }
 
 }
