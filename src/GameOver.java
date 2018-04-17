@@ -22,7 +22,7 @@ public class GameOver extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.sb = sb;
-        jLabel2.setText("" + sb.getScore());
+        jLabel2.setText("" + sb.printScore());
         
     }
     private JFrame frame;

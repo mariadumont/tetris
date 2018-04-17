@@ -96,6 +96,8 @@ public class Board extends JPanel implements ActionListener {
 
         initValues();
         timer = new Timer(deltaTime, this);
+        myKeyAdepter = new MyKeyAdapter();
+
     }
 
     private void initValues() {
@@ -109,16 +111,15 @@ public class Board extends JPanel implements ActionListener {
         currentRow = INIT_ROW;
         currentCol = NUM_COLS / 2;
 
-        myKeyAdepter = new MyKeyAdapter();
-
     }
 
     public void initGame() {
+
         initValues();
         timer.start();
 
         currentShape = new Shape(); // = Shape.getRandomShape()
-
+        removeKeyListener(myKeyAdepter);
         addKeyListener(myKeyAdepter);
 
     }
@@ -172,6 +173,7 @@ public class Board extends JPanel implements ActionListener {
                 currentRow = INIT_ROW;
                 currentCol = NUM_COLS / 2;
                 checkRow();
+
             }
 
         }
@@ -194,14 +196,12 @@ public class Board extends JPanel implements ActionListener {
 
     public void gameOver() {
         scoreBoard.setText("GAME OVER");
-        
+
         removeKeyListener(myKeyAdepter);
         timer.stop();
-        
+
         GameOver dialog = new GameOver((JFrame) getParent().getParent().getParent().getParent(), true, scoreBoard);
         dialog.setVisible(true);
-        
-        
 
     }
 
@@ -217,8 +217,26 @@ public class Board extends JPanel implements ActionListener {
             }
             if (lineNoWhite) {
                 cleanRow(i);
+                if (upLevel()) {
+                    if (deltaTime <= 50) {
+                        deltaTime = deltaTime;
+                        timer.setDelay(deltaTime);
+                        scoreBoard.setText(scoreBoard + "Artista!!!!!!!");
+                    }
+                    deltaTime -= 50;
+                    timer.setDelay(deltaTime);
+
+                }
             }
         }
+    }
+
+    public boolean upLevel() {
+        if (scoreBoard.getScore() % 5 == 0) {
+            scoreBoard.incrementLevel(1);
+            return true;
+        }
+        return false;
     }
 
     private void cleanRow(int numRow) {
@@ -227,6 +245,7 @@ public class Board extends JPanel implements ActionListener {
                 matrix[i][j] = matrix[i - 1][j];
             }
         }
+
         scoreBoard.increment(1);
 
     }
