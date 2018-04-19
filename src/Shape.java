@@ -1,9 +1,11 @@
+
+import java.awt.Graphics;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author alu20482156n
@@ -123,5 +125,12 @@ public class Shape {
             }
         }
         return candidate;
+    }
+
+    public void draw(Graphics g, int row, int col, int squareWidth, int squareHeight) {
+
+        for (int point = 0; point <= 3; point++) {
+            Util.drawSquare(g, row + coordinates[point][1], col + coordinates[point][0], pieceShape, squareWidth, squareHeight);
+        }
     }
 }

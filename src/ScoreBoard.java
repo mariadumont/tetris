@@ -13,13 +13,13 @@ import javax.swing.JLabel;
 public class ScoreBoard extends JLabel {
 
     private int score;
-    
+
     private int level;
 
     public ScoreBoard() {
         super(); //inicializamos la superclase
         score = 0;
-        level=1;
+        level = 1;
 
     }
 
@@ -30,6 +30,7 @@ public class ScoreBoard extends JLabel {
 
     public void reset() {
         score = 0;
+        level = 1;
         //setText("Score: " + 0);
         setText("Level: " + level + " · Score: " + 0);
     }
@@ -50,10 +51,14 @@ public class ScoreBoard extends JLabel {
     public int getScore() {
         return score;
     }
-    
-    public void incrementLevel(int level) {
-        level += level;
+
+    public void incrementLevel(int levelIncrement) {
+        level += levelIncrement;
         setText("Level: " + level + " · Score: " + score);
+    }
+
+    public void maxLevel() {
+        setText("Level: " + level + " · Score: " + score + " ¡Artista!");
     }
 
 }
