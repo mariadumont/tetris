@@ -15,6 +15,7 @@ public class Tetris extends javax.swing.JFrame {
      */
     public Tetris() {
         initComponents();
+        setLocationRelativeTo(null); //centra el JPanel
         board.setScoreBoard(scoreBoard);
         board.setNextShape(nextShape1);
     }

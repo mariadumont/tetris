@@ -178,6 +178,7 @@ public class Board extends JPanel implements ActionListener {
                 gameOver();
             } else {
                 moveCurrentShapeToMatrix();
+                checkRow();
 
                 //currentShape = new Shape();
                 currentShape = nextShape.getShape();
@@ -185,7 +186,6 @@ public class Board extends JPanel implements ActionListener {
 
                 currentRow = INIT_ROW;
                 currentCol = NUM_COLS / 2;
-                checkRow();
 
             }
 
@@ -230,26 +230,16 @@ public class Board extends JPanel implements ActionListener {
             }
             if (lineNoWhite) {
                 cleanRow(i);
-                if (upLevel()) {
-                    if (deltaTime <= 50) {
-                        deltaTime = deltaTime;
-                        timer.setDelay(deltaTime);
-                        scoreBoard.maxLevel();
-                    }
-                    deltaTime -= 50;
-                    timer.setDelay(deltaTime);
 
+                if (deltaTime >= 100) {
+                    if (scoreBoard.getScore() % 5 == 0) {
+                        deltaTime -= 50;
+                        timer.setDelay(deltaTime);
+                    }
                 }
+
             }
         }
-    }
-
-    public boolean upLevel() {
-        if (scoreBoard.getScore() % 5 == 0) {
-            scoreBoard.incrementLevel(1);
-            return true;
-        }
-        return false;
     }
 
     private void cleanRow(int numRow) {

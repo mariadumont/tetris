@@ -16,6 +16,8 @@ public class ScoreBoard extends JLabel {
 
     private int level;
 
+    String[] sentences = {"¡Artista!", "¡Ole tu!", "¡Toma geroma!"};
+
     public ScoreBoard() {
         super(); //inicializamos la superclase
         score = 0;
@@ -25,14 +27,23 @@ public class ScoreBoard extends JLabel {
 
     public void increment(int points) {
         score += points;
-        setText("Level: " + level + " · Score: " + score);;
+
+        if (score % 5 == 0) {
+            level++;
+        }
+
+        setText("Level: " + level + " · Score: " + score);
+
+        if (score >= 10) {
+            setText("Level: " + level + " · Score: " + score + " " + getSentence());
+        }
     }
 
     public void reset() {
         score = 0;
         level = 1;
-        //setText("Score: " + 0);
-        setText("Level: " + level + " · Score: " + 0);
+
+        setText("Level: " + level + " · Score: " + score);
     }
 
     public void pause() {
@@ -52,13 +63,13 @@ public class ScoreBoard extends JLabel {
         return score;
     }
 
-    public void incrementLevel(int levelIncrement) {
-        level += levelIncrement;
-        setText("Level: " + level + " · Score: " + score);
-    }
+    public String getSentence() {
+        String s = "";
+        int num = (int) (Math.random() * sentences.length);
 
-    public void maxLevel() {
-        setText("Level: " + level + " · Score: " + score + " ¡Artista!");
+        s = sentences[num];
+
+        return "" + s;
     }
 
 }
