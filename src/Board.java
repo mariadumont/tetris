@@ -65,6 +65,12 @@ public class Board extends JPanel implements ActionListener {
 
     }
 
+    private JFrame parentFrame;
+
+    public void setParentFrame(JFrame parentFrame) {
+        this.parentFrame = parentFrame;
+    }
+
     public static final int NUM_ROWS = 22;
     public static final int NUM_COLS = 10;
 
@@ -215,6 +221,9 @@ public class Board extends JPanel implements ActionListener {
 
         GameOver dialog = new GameOver((JFrame) getParent().getParent().getParent().getParent(), true, scoreBoard);
         dialog.setVisible(true);
+
+        RecordsDialog d = new RecordsDialog(parentFrame, true, scoreBoard.getScore());
+        d.setVisible(true);
 
     }
 
